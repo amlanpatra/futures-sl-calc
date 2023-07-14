@@ -1,35 +1,22 @@
-// inputs :
-// Max risk
-// Lot size
-// Entry price
-// Buy/Sell radio button
-
-// output :
-// maximum permitted SL to stay between max risk
-
-// logic :
-// for buy
-// SL = Entry price - (max risk / lot size)
-
-// for short
-// SL = Entry price + (max risk / lot size)
 import { useState, useEffect } from "react";
+import { calculateSl } from "./CoreLogic";
 export default function Calc() {
   const [maxRisk, setMaxRisk] = useState(1000);
   const [lotSize, setLotSize] = useState(15);
-  const [entryPrice, setEntryPrice] = useState(47);
+  const [entryPrice, setEntryPrice] = useState(44);
   const [tradeType, setTradeType] = useState("BUY");
   const [sl, setSl] = useState(0);
+  const [breakevenPrice, setBreakevenPrice] = useState(0);
 
   useEffect(() => {
-    let newSl;
-    if (tradeType == "BUY") {
-      newSl = parseFloat(entryPrice) - parseFloat(maxRisk) / parseInt(lotSize);
-    } else if (tradeType == "SELL") {
-      newSl = parseFloat(entryPrice) + parseFloat(maxRisk) / parseInt(lotSize);
-    }
-    newSl = Math.round(newSl * 100) / 100; // for 2 floating digits
+    let [newSl, newBreakevenPrice] = calculateSl(
+      maxRisk,
+      lotSize,
+      entryPrice,
+      tradeType
+    );
     setSl(newSl);
+    setBreakevenPrice(newBreakevenPrice);
   }, [maxRisk, lotSize, entryPrice, tradeType]);
 
   return (
@@ -101,6 +88,17 @@ export default function Calc() {
             readOnly
             className="px-2 m-2 border-[1px] rounded-md border-slate-200 bg-inherit"
             value={sl}
+          />
+        </label>
+      </div>
+      <div className="breakevenCalculation">
+        <label>
+          BE
+          <input
+            type="text"
+            readOnly
+            className="px-2 m-2 border-[1px] rounded-md border-slate-200 bg-inherit"
+            value={breakevenPrice}
           />
         </label>
       </div>
