@@ -48,4 +48,27 @@ function calculateBrokerage(lotSize, entryPrice) {
   return totalBrokerages;
 }
 
-export { calculateSl };
+function calculateProfitPrice(
+  profitRatio = 0.5,
+  maxRisk,
+  lotSize = 15,
+  entryPrice,
+  tradeType
+) {
+  let profitTotal =
+    parseFloat(maxRisk) * parseFloat(profitRatio) +
+    parseFloat(calculateBrokerage(lotSize, entryPrice));
+
+  let profitPerUnit = profitTotal / parseFloat(lotSize);
+
+  let profitPrice =
+    tradeType == "BUY"
+      ? parseFloat(entryPrice) + profitPerUnit
+      : parseFloat(entryPrice) - profitPerUnit;
+
+  profitPrice = parseInt(profitPrice * 100) / 100;
+
+  return profitPrice;
+}
+
+export { calculateSl, calculateProfitPrice };

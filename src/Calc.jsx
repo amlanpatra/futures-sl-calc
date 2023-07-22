@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { calculateSl } from "./CoreLogic";
+import { calculateSl, calculateProfitPrice } from "./CoreLogic";
 export default function Calc() {
   const [maxRisk, setMaxRisk] = useState(1000);
   const [lotSize, setLotSize] = useState(15);
@@ -20,7 +20,7 @@ export default function Calc() {
   }, [maxRisk, lotSize, entryPrice, tradeType]);
 
   return (
-    <div className="text-white">
+    <div className="calculator text-white">
       <div className="inputs">
         <label>
           Max Risk
@@ -53,6 +53,7 @@ export default function Calc() {
         </label>
         <br />
       </div>
+
       <div className="tradeType flex justify-around">
         <label className="mr-2">
           Buy
@@ -91,6 +92,7 @@ export default function Calc() {
           />
         </label>
       </div>
+
       <div className="breakevenCalculation">
         <label>
           BE
@@ -101,6 +103,43 @@ export default function Calc() {
             value={breakevenPrice}
           />
         </label>
+      </div>
+
+      <div className="profitPrices">
+        <div className="profit_0.5xRisk">
+          <label>
+            0.5:1 P
+            <input
+              type="text"
+              readOnly
+              className="px-2 m-2 border-[1px] rounded-md border-slate-200 bg-inherit"
+              value={calculateProfitPrice(
+                0.5,
+                maxRisk,
+                lotSize,
+                entryPrice,
+                tradeType
+              )}
+            />
+          </label>
+        </div>
+        <div className="profit_1xRisk">
+          <label>
+            1:1 P
+            <input
+              type="text"
+              readOnly
+              className="px-2 m-2 border-[1px] rounded-md border-slate-200 bg-inherit"
+              value={calculateProfitPrice(
+                1,
+                maxRisk,
+                lotSize,
+                entryPrice,
+                tradeType
+              )}
+            />
+          </label>
+        </div>
       </div>
     </div>
   );
